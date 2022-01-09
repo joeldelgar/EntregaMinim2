@@ -18,13 +18,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        TextView usernom = findViewById(R.id.userNameText);
+        TextView user = findViewById(R.id.userNameText);
         Button info = findViewById(R.id.info_btn);
 
         info.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String userName = usernom.getText().toString();
+                String userName = user.getText().toString();
 
                 SharedPreferences sharedPreferences = getSharedPreferences("userName", Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -35,6 +35,5 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
     }
 }
