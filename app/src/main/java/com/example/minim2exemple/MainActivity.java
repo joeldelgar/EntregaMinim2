@@ -25,15 +25,16 @@ public class MainActivity extends AppCompatActivity {
         TextView user = findViewById(R.id.userNameText);
         Button info = findViewById(R.id.info_btn);
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://api.github.com/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
 
         info.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String userName = user.getText().toString();
+                Retrofit retrofit = new Retrofit.Builder()
+                        .baseUrl("https://api.github.com/")
+                        .addConverterFactory(GsonConverterFactory.create())
+                        .build();
+
                 Call<User> call = retrofit.create(API.class).getInfoUser(userName);
                 call.enqueue(new Callback<User>() {
                     @Override
