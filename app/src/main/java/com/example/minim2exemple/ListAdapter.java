@@ -7,52 +7,61 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
+import com.example.minim2exemple.API.User;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
 public class ListAdapter extends RecyclerView.Adapter<ListAdapter.MyViewHolder> {
-    List<User> followers;
-    Context context;
 
-    public ListAdapter(Context context, List<User> followers){
-        this.followers = followers;
-        this.context = context;
+    private List<User> dades;
+    private LayoutInflater mInflater;
+    private Context context;
+
+    public ListAdapter(List<User> userList, Context context) {
+        this.dades = userList;
+        this.mInflater = LayoutInflater.from((Context) context);
+        this.context = (Context) context;
     }
 
-    @NonNull
+
     @Override
-    public ListAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_users_list,parent,false);
-        return new MyViewHolder(view);
+    public ListAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View v = mInflater.inflate(R.layout.activity_users_list, null);
+        return new ListAdapter.MyViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ListAdapter.MyViewHolder holder, int position) {
-        User user=followers.get(position);
-        holder.name.setText(user.getLogin());
-        Glide.with(context).load(user.getAvatar_url()).into(holder.images);
+    public void onBindViewHolder(ListAdapter.MyViewHolder holder, int position) {
+        holder.bindData(dades.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return followers.size();
+        return dades.size();
+    }
+
+    public void setItems(List<User> items){
+        dades=items;
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder{
+        ImageView image;
+        TextView username;
 
-        TextView name;
-        ImageView images;
-
-        public MyViewHolder(@NonNull View itemView){
+        MyViewHolder(View itemView){
             super(itemView);
-            name = itemView.findViewById(R.id.NameTextView);
-            images=itemView.findViewById(R.id.imageView);
-
+            image=itemView.findViewById(R.id.image);
+            username=itemView.findViewById(R.id.NameTextView);
         }
+
+        void bindData(final User user){
+            username.setText(user.getLogin());
+            Picasso.get().load(user.getAvatar_url()).into(image);
+        }
+
+
     }
 }

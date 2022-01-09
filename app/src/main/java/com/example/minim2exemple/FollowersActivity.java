@@ -4,14 +4,19 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-
-import org.w3c.dom.Text;
+import com.example.minim2exemple.API.API;
+import com.example.minim2exemple.API.User;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -28,43 +33,68 @@ public class FollowersActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_followers);
 
+
+        getUser();
+        getFollowers();
+    }
+
+    public void getUser(){
+
         ImageView avatar = (ImageView) findViewById(R.id.imageView);
-        TextView user = (TextView) findViewById(R.id.userNameText);
-        TextView repos = (TextView) findViewById(R.id.repos);
-        TextView following = (TextView)  findViewById(R.id.following);
-        RecyclerView recyclerView = findViewById(R.id.RecyclerViewList);
+        TextView userNom = (TextView) findViewById(R.id.userName);
+        TextView repositories = (TextView) findViewById(R.id.repos);
+        TextView following = (TextView) findViewById(R.id.following);
 
-        Glide.with(this).load(getIntent().getStringExtra("image")).into(avatar);
-        repos.setText("Repositories: "+ getIntent().getStringExtra("repos"));
-        following.setText("Following: "+ getIntent().getStringExtra("following"));
-        user.setText("user"+getIntent().getStringExtra("user"));
+        SharedPreferences sharedPrefer = getSharedPreferences("userName", Context.MODE_PRIVATE);
+        String userName = sharedPrefer.getString("User", null);
 
+        Gson gson = new GsonBuilder().setLenient().create();
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(API.BASE_URL).addConverterFactory(GsonConverterFactory.create(gson)).build();
+        API gerritAPI = retrofit.create(API.class);
+        Call<User> call = gerritAPI.getInfoUser(userName);
+        call.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                User user = response.body();
+                String repos = user.getPublic_repos();
+                String follow = user.getFollowing();
+                Picasso.get().load(user.getAvatar_url()).into(avatar);
+                userNom.setText(userName);
+                repositories.setText(repos);
+                following.setText(follow);
+            }
 
-        Retrofit retrofit= new Retrofit.Builder()
-                .baseUrl("https://api.github.com/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                Intent intent = new Intent(getApplicationContext(), ErrorActivity.class);
+                startActivity(intent);
+            }
+        });
+    }
 
-        API api = retrofit.create(API.class);
+    public void getFollowers(){
+        SharedPreferences sharedPrefer = getSharedPreferences("userName", Context.MODE_PRIVATE);
+        String userName = sharedPrefer.getString("User", null);
 
-        String userName = user.getText().toString();
-        Call<List<User>> call = api.getFollowers(userName);
+        Gson gson = new GsonBuilder().setLenient().create();
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(API.BASE_URL).addConverterFactory(GsonConverterFactory.create(gson)).build();
+        API gerritAPI = retrofit.create(API.class);
+        Call<List<User>> call = gerritAPI.getFollowers(userName);
         call.enqueue(new Callback<List<User>>() {
             @Override
             public void onResponse(Call<List<User>> call, Response<List<User>> response) {
-                if(!response.isSuccessful()){
-                    Log.i("Followers", "Error "+response.code());
-                    return;
-                }
-                List<User> followers = response.body();
-                ListAdapter adapter = new ListAdapter(FollowersActivity.this, followers);
-                recyclerView.setAdapter(adapter);
+                List<User> userList = response.body();
+                ListAdapter listAdapter = new ListAdapter(userList, FollowersActivity.this);
+                RecyclerView recyclerView = findViewById(R.id.RecyclerViewList);
+                recyclerView.setHasFixedSize(true);
                 recyclerView.setLayoutManager(new LinearLayoutManager(FollowersActivity.this));
+                recyclerView.setAdapter(listAdapter);
             }
 
             @Override
             public void onFailure(Call<List<User>> call, Throwable t) {
-                Log.i("Followers", "onFailure "+t.getMessage());
+                Intent intent = new Intent (getApplicationContext(), ErrorActivity.class);
+                startActivity(intent);
             }
         });
     }

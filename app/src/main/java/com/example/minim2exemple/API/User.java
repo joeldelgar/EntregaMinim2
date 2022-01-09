@@ -1,4 +1,4 @@
-package com.example.minim2exemple;
+package com.example.minim2exemple.API;
 
 public class User {
     private String login;
