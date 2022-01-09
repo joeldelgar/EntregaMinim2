@@ -8,9 +8,9 @@ import retrofit2.http.Path;
 
 public interface API {
 
-    @GET("users/{id}")
-    Call<User> getInfoUser(@Path("id") String userid);
+    @GET("users/{username}")
+    Call<User> getInfoUser(@Path("id") String username);
 
-    @GET("users/{id}/followers")
-    Call<List<User>> getFollowers(@Path("id") String userid);
+    @GET("users/{username}/followers")
+    Call<List<User>> getFollowers(@Path("id") String username);
 }
