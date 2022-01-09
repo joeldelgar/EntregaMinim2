@@ -30,12 +30,11 @@ public class MainActivity extends AppCompatActivity {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
-        API api = retrofit.create(API.class);
-
         info.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Call<User> call = api.getInfoUser(user.getText().toString());
+                String userName = user.getText().toString();
+                Call<User> call = retrofit.create(API.class).getInfoUser(userName);
                 call.enqueue(new Callback<User>() {
                     @Override
                     public void onResponse(Call<User> call, Response<User> response) {
