@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#CDDC39"
     tools:context=".MainActivity">
 
     <EditText
@@ -24,6 +25,7 @@
         android:id="@+id/info_btn"
         android:layout_width="366dp"
         android:layout_height="69dp"
+        android:backgroundTint="#9C27B0"
         android:text="INFO"
         android:textSize="34sp"
         app:layout_constraintBottom_toBottomOf="parent"

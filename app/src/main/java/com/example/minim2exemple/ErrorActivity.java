@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 
 public class ErrorActivity extends AppCompatActivity {
 
@@ -14,7 +15,7 @@ public class ErrorActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_error);
 
-        Button return_btn = (Button) findViewById(R.id.return_btn);
+        ImageButton return_btn = (ImageButton) findViewById(R.id.return_btn);
 
         return_btn.setOnClickListener(new View.OnClickListener() {
             @Override

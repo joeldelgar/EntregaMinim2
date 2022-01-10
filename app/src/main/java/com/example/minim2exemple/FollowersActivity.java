@@ -63,6 +63,10 @@ public class FollowersActivity extends AppCompatActivity {
         call.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
+                if(!response.isSuccessful()){
+                    Intent intent = new Intent(getApplicationContext(), ErrorActivity.class);
+                    startActivity(intent);
+                }
                 User user = response.body();
                 String repos = user.getPublic_repos();
                 String follow = user.getFollowing();
@@ -86,6 +90,10 @@ public class FollowersActivity extends AppCompatActivity {
         call2.enqueue(new Callback<List<User>>() {
             @Override
             public void onResponse(Call<List<User>> call2, Response<List<User>> response) {
+                if(!response.isSuccessful()){
+                    Intent intent = new Intent(getApplicationContext(), ErrorActivity.class);
+                    startActivity(intent);
+                }
                 List<User> userList = response.body();
                 ListAdapter listAdapter = new ListAdapter(userList, FollowersActivity.this);
                 RecyclerView recyclerView = findViewById(R.id.RecyclerViewList);
