@@ -11,8 +11,8 @@ public interface API {
     public static final String BASE_URL = "https://api.github.com/";
 
     @GET("users/{username}")
-    Call<User> getInfoUser(@Path("id") String username);
+    Call<User> getInfoUser(@Path("username") String username);
 
     @GET("users/{username}/followers")
-    Call<List<User>> getFollowers(@Path("id") String username);
+    Call<List<User>> getFollowers(@Path("username") String username);
 }

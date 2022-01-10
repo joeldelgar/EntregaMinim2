@@ -53,7 +53,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.MyViewHolder> 
 
         MyViewHolder(View itemView){
             super(itemView);
-            image=itemView.findViewById(R.id.image);
+            image=itemView.findViewById(R.id.iconImagenView);
             username=itemView.findViewById(R.id.NameTextView);
         }
 
@@ -61,7 +61,6 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.MyViewHolder> 
             username.setText(user.getLogin());
             Picasso.get().load(user.getAvatar_url()).into(image);
         }
-
 
     }
 }
