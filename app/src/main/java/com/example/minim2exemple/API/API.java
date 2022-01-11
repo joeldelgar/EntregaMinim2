@@ -13,6 +13,6 @@ public interface API {
     @GET("users/{username}")
     Call<User> getInfoUser(@Path("username") String username);
 
-    @GET("users/{username}/followers")
-    Call<List<User>> getFollowers(@Path("username") String username);
+    @GET("users/{username}/repos")
+    Call<List<Repos>> getRepos(@Path("username") String username);
 }

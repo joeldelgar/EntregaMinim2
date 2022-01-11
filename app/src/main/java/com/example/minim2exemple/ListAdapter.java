@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.minim2exemple.API.Repos;
 import com.example.minim2exemple.API.User;
 import com.squareup.picasso.Picasso;
 
@@ -16,12 +17,12 @@ import java.util.List;
 
 public class ListAdapter extends RecyclerView.Adapter<ListAdapter.MyViewHolder> {
 
-    private List<User> dades;
+    private List<Repos> dades;
     private LayoutInflater mInflater;
     private Context context;
 
-    public ListAdapter(List<User> userList, Context context) {
-        this.dades = userList;
+    public ListAdapter(List<Repos> reposList, Context context) {
+        this.dades = reposList;
         this.mInflater = LayoutInflater.from((Context) context);
         this.context = (Context) context;
     }
@@ -29,7 +30,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.MyViewHolder> 
 
     @Override
     public ListAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = mInflater.inflate(R.layout.activity_users_list, null);
+        View v = mInflater.inflate(R.layout.activity_repos_list, null);
         return new ListAdapter.MyViewHolder(v);
     }
 
@@ -43,23 +44,24 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.MyViewHolder> 
         return dades.size();
     }
 
-    public void setItems(List<User> items){
+    public void setItems(List<Repos> items){
         dades=items;
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder{
-        ImageView image;
+        TextView language;
         TextView username;
 
         MyViewHolder(View itemView){
             super(itemView);
-            image=itemView.findViewById(R.id.iconImagenView);
             username=itemView.findViewById(R.id.NameTextView);
+            language=itemView.findViewById(R.id.languajeTextView);
         }
 
-        void bindData(final User user){
-            username.setText(user.getLogin());
-            Picasso.get().load(user.getAvatar_url()).into(image);
+        void bindData(final Repos repo){
+            username.setText(repo.getName());
+            language.setText(repo.getLanguaje());
+
         }
 
     }

@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.minim2exemple.API.API;
+import com.example.minim2exemple.API.Repos;
 import com.example.minim2exemple.API.User;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -50,7 +51,7 @@ public class FollowersActivity extends AppCompatActivity {
 
         ImageView avatar = (ImageView) findViewById(R.id.imageView);
         TextView userNom = (TextView) findViewById(R.id.userName);
-        TextView repositories = (TextView) findViewById(R.id.repos);
+        TextView followers = (TextView) findViewById(R.id.repos);
         TextView following = (TextView) findViewById(R.id.following);
 
         SharedPreferences sharedPrefer = getSharedPreferences("userName", Context.MODE_PRIVATE);
@@ -68,11 +69,11 @@ public class FollowersActivity extends AppCompatActivity {
                     startActivity(intent);
                 }
                 User user = response.body();
-                String repos = user.getPublic_repos();
+                String followrs = user.getFollowers();
                 String follow = user.getFollowing();
                 Picasso.get().load(user.getAvatar_url()).into(avatar);
                 userNom.setText(userName);
-                repositories.setText(repos);
+                followers.setText(followrs);
                 following.setText(follow);
             }
 
@@ -86,16 +87,16 @@ public class FollowersActivity extends AppCompatActivity {
         Gson gson2 = new GsonBuilder().setLenient().create();
         Retrofit retrofit2 = new Retrofit.Builder().baseUrl(API.BASE_URL).addConverterFactory(GsonConverterFactory.create(gson2)).build();
         API gerritAPI2 = retrofit2.create(API.class);
-        Call<List<User>> call2 = gerritAPI2.getFollowers(userName);
-        call2.enqueue(new Callback<List<User>>() {
+        Call<List<Repos>> call2 = gerritAPI2.getRepos(userName);
+        call2.enqueue(new Callback<List<Repos>>() {
             @Override
-            public void onResponse(Call<List<User>> call2, Response<List<User>> response) {
+            public void onResponse(Call<List<Repos>> call2, Response<List<Repos>> response) {
                 if(!response.isSuccessful()){
                     Intent intent = new Intent(getApplicationContext(), ErrorActivity.class);
                     startActivity(intent);
                 }
-                List<User> userList = response.body();
-                ListAdapter listAdapter = new ListAdapter(userList, FollowersActivity.this);
+                List<Repos> reposList = response.body();
+                ListAdapter listAdapter = new ListAdapter(reposList, FollowersActivity.this);
                 RecyclerView recyclerView = findViewById(R.id.RecyclerViewList);
                 recyclerView.setHasFixedSize(true);
                 recyclerView.setLayoutManager(new LinearLayoutManager(FollowersActivity.this));
@@ -103,7 +104,7 @@ public class FollowersActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<List<User>> call, Throwable t) {
+            public void onFailure(Call<List<Repos>> call, Throwable t) {
                 Intent intent = new Intent (getApplicationContext(), ErrorActivity.class);
                 startActivity(intent);
             }
