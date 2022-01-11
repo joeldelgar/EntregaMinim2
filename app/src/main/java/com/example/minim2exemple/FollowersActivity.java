@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.minim2exemple.API.API;
@@ -101,6 +102,7 @@ public class FollowersActivity extends AppCompatActivity {
                 recyclerView.setHasFixedSize(true);
                 recyclerView.setLayoutManager(new LinearLayoutManager(FollowersActivity.this));
                 recyclerView.setAdapter(listAdapter);
+                findViewById(R.id.ProgressBar).setVisibility(View.GONE);
             }
 
             @Override
@@ -109,5 +111,6 @@ public class FollowersActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
     }
 }

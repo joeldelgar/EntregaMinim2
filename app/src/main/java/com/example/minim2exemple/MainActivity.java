@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
                 editor.putString("User", userName);
                 editor.commit();
 
-                Intent intent = new Intent(getApplicationContext(), SplashActivity.class);
+                Intent intent = new Intent(getApplicationContext(), FollowersActivity.class);
                 startActivity(intent);
             }
         });
